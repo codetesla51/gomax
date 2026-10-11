@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: gomax
+      POSTGRES_USER: gomax
+      POSTGRES_PASSWORD: gomax
+    ports:
+      - "5432:5432"
+    volumes:
+      - gomax-pg:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+volumes:
+  gomax-pg:

@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: gomax
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    numInstances: 1
+    healthCheckPath: /healthz
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: gomax-db
+          property: connectionString
+      - key: PG_POOL_MAX
+        value: 4
+      - key: CACHE_TTL_SECS
+        value: 30
+# REDIS_URL is attached after deploy (Key Value can't live in blueprints):
+# render keyvalues create, then render services update gomax with REDIS_URL.
+
+databases:
+  - name: gomax-db
+    plan: free
