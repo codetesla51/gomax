@@ -30,7 +30,7 @@ type Config struct {
 
 func configFromEnv() Config {
 	return Config{
-		Addr:        envOr("ADDR", ":8080"),
+		Addr:        envOr("ADDR", defaultPort()),
 		DatabaseURL: os.Getenv("DATABASE_URL"),
 		RedisURL:    os.Getenv("REDIS_URL"),
 		RedisAddr:   envOr("REDIS_ADDR", "localhost:6379"),
@@ -38,6 +38,14 @@ func configFromEnv() Config {
 		PoolMax:     int32(envIntOr("PG_POOL_MAX", 8)),
 		CacheTTL:    time.Duration(envIntOr("CACHE_TTL_SECS", 30)) * time.Second,
 	}
+}
+
+// Render injects PORT; local runs default to :8080.
+func defaultPort() string {
+	if p := os.Getenv("PORT"); p != "" {
+		return ":" + p
+	}
+	return ":8080"
 }
 
 func envOr(k, d string) string {
