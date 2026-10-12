@@ -60,8 +60,15 @@ func (st *itemStore) ensureSchema(ctx context.Context) error {
 		return err
 	}
 	// One warm row so the read path is testable immediately.
+	// NOTE: explicit ids don't advance the BIGSERIAL sequence, so park it
+	// past max(id) or the next auto-insert collides (live 500, 23505).
 	_, err = st.db.Exec(ctx, `INSERT INTO items (id, name, price_cents)
 		VALUES (1, 'warm', 100) ON CONFLICT (id) DO NOTHING`)
+	if err != nil {
+		return err
+	}
+	_, err = st.db.Exec(ctx, `SELECT setval(pg_get_serial_sequence('items', 'id'),
+		COALESCE((SELECT max(id) FROM items), 0) + 1, false)`)
 	return err
 }
 

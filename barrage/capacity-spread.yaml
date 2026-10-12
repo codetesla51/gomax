@@ -1,0 +1,121 @@
+# Spread-key sweep: 20 hot keys across the table, not one.
+# IDs 1, 5000..95000 (all exist; rows are never deleted).
+duration: 30s
+bucket_width: 1s
+concurrency: 5
+capacity:
+  max_concurrency: 200
+  step_duration: 20s
+scenario:
+  - name: read-00001
+    weight: 4
+    steps:
+      - method: GET
+        url: http://localhost:8080/v1/items/1
+  - name: read-05000
+    weight: 4
+    steps:
+      - method: GET
+        url: http://localhost:8080/v1/items/5000
+  - name: read-10000
+    weight: 4
+    steps:
+      - method: GET
+        url: http://localhost:8080/v1/items/10000
+  - name: read-15000
+    weight: 4
+    steps:
+      - method: GET
+        url: http://localhost:8080/v1/items/15000
+  - name: read-20000
+    weight: 4
+    steps:
+      - method: GET
+        url: http://localhost:8080/v1/items/20000
+  - name: read-25000
+    weight: 4
+    steps:
+      - method: GET
+        url: http://localhost:8080/v1/items/25000
+  - name: read-30000
+    weight: 4
+    steps:
+      - method: GET
+        url: http://localhost:8080/v1/items/30000
+  - name: read-35000
+    weight: 4
+    steps:
+      - method: GET
+        url: http://localhost:8080/v1/items/35000
+  - name: read-40000
+    weight: 4
+    steps:
+      - method: GET
+        url: http://localhost:8080/v1/items/40000
+  - name: read-45000
+    weight: 4
+    steps:
+      - method: GET
+        url: http://localhost:8080/v1/items/45000
+  - name: read-50000
+    weight: 4
+    steps:
+      - method: GET
+        url: http://localhost:8080/v1/items/50000
+  - name: read-55000
+    weight: 4
+    steps:
+      - method: GET
+        url: http://localhost:8080/v1/items/55000
+  - name: read-60000
+    weight: 4
+    steps:
+      - method: GET
+        url: http://localhost:8080/v1/items/60000
+  - name: read-65000
+    weight: 4
+    steps:
+      - method: GET
+        url: http://localhost:8080/v1/items/65000
+  - name: read-70000
+    weight: 4
+    steps:
+      - method: GET
+        url: http://localhost:8080/v1/items/70000
+  - name: read-75000
+    weight: 4
+    steps:
+      - method: GET
+        url: http://localhost:8080/v1/items/75000
+  - name: read-80000
+    weight: 4
+    steps:
+      - method: GET
+        url: http://localhost:8080/v1/items/80000
+  - name: read-85000
+    weight: 4
+    steps:
+      - method: GET
+        url: http://localhost:8080/v1/items/85000
+  - name: read-90000
+    weight: 4
+    steps:
+      - method: GET
+        url: http://localhost:8080/v1/items/90000
+  - name: read-95000
+    weight: 4
+    steps:
+      - method: GET
+        url: http://localhost:8080/v1/items/95000
+  - name: health
+    weight: 10
+    steps:
+      - method: GET
+        url: http://localhost:8080/healthz
+  - name: create-item
+    weight: 10
+    steps:
+      - method: POST
+        url: http://localhost:8080/v1/items
+        body: '{"name":"bench","price_cents":99}'
+        headers: {Content-Type: application/json}
