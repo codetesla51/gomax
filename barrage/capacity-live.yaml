@@ -1,112 +1,112 @@
-# Spread-key sweep: 20 hot keys across the table, not one.
-# IDs 1, 5000..95000 (all exist; rows are never deleted).
+# LIVE sweep: 20 real keys on the live DB, spread by creation.
 duration: 30s
 bucket_width: 1s
+ramp: 30s
 concurrency: 2
 capacity:
   max_concurrency: 100
   step_duration: 15s
 scenario:
-  - name: read-00001
+  - name: read-4
     weight: 4
     steps:
       - method: GET
-        url: https://gomax-ndql.onrender.com/v1/items/1
-  - name: read-05000
+        url: https://gomax-ndql.onrender.com/v1/items/4
+  - name: read-5
     weight: 4
     steps:
       - method: GET
-        url: https://gomax-ndql.onrender.com/v1/items/5000
-  - name: read-10000
+        url: https://gomax-ndql.onrender.com/v1/items/5
+  - name: read-6
     weight: 4
     steps:
       - method: GET
-        url: https://gomax-ndql.onrender.com/v1/items/10000
-  - name: read-15000
+        url: https://gomax-ndql.onrender.com/v1/items/6
+  - name: read-7
     weight: 4
     steps:
       - method: GET
-        url: https://gomax-ndql.onrender.com/v1/items/15000
-  - name: read-20000
+        url: https://gomax-ndql.onrender.com/v1/items/7
+  - name: read-8
     weight: 4
     steps:
       - method: GET
-        url: https://gomax-ndql.onrender.com/v1/items/20000
-  - name: read-25000
+        url: https://gomax-ndql.onrender.com/v1/items/8
+  - name: read-9
     weight: 4
     steps:
       - method: GET
-        url: https://gomax-ndql.onrender.com/v1/items/25000
-  - name: read-30000
+        url: https://gomax-ndql.onrender.com/v1/items/9
+  - name: read-10
     weight: 4
     steps:
       - method: GET
-        url: https://gomax-ndql.onrender.com/v1/items/30000
-  - name: read-35000
+        url: https://gomax-ndql.onrender.com/v1/items/10
+  - name: read-11
     weight: 4
     steps:
       - method: GET
-        url: https://gomax-ndql.onrender.com/v1/items/35000
-  - name: read-40000
+        url: https://gomax-ndql.onrender.com/v1/items/11
+  - name: read-12
     weight: 4
     steps:
       - method: GET
-        url: https://gomax-ndql.onrender.com/v1/items/40000
-  - name: read-45000
+        url: https://gomax-ndql.onrender.com/v1/items/12
+  - name: read-13
     weight: 4
     steps:
       - method: GET
-        url: https://gomax-ndql.onrender.com/v1/items/45000
-  - name: read-50000
+        url: https://gomax-ndql.onrender.com/v1/items/13
+  - name: read-14
     weight: 4
     steps:
       - method: GET
-        url: https://gomax-ndql.onrender.com/v1/items/50000
-  - name: read-55000
+        url: https://gomax-ndql.onrender.com/v1/items/14
+  - name: read-15
     weight: 4
     steps:
       - method: GET
-        url: https://gomax-ndql.onrender.com/v1/items/55000
-  - name: read-60000
+        url: https://gomax-ndql.onrender.com/v1/items/15
+  - name: read-16
     weight: 4
     steps:
       - method: GET
-        url: https://gomax-ndql.onrender.com/v1/items/60000
-  - name: read-65000
+        url: https://gomax-ndql.onrender.com/v1/items/16
+  - name: read-17
     weight: 4
     steps:
       - method: GET
-        url: https://gomax-ndql.onrender.com/v1/items/65000
-  - name: read-70000
+        url: https://gomax-ndql.onrender.com/v1/items/17
+  - name: read-18
     weight: 4
     steps:
       - method: GET
-        url: https://gomax-ndql.onrender.com/v1/items/70000
-  - name: read-75000
+        url: https://gomax-ndql.onrender.com/v1/items/18
+  - name: read-19
     weight: 4
     steps:
       - method: GET
-        url: https://gomax-ndql.onrender.com/v1/items/75000
-  - name: read-80000
+        url: https://gomax-ndql.onrender.com/v1/items/19
+  - name: read-20
     weight: 4
     steps:
       - method: GET
-        url: https://gomax-ndql.onrender.com/v1/items/80000
-  - name: read-85000
+        url: https://gomax-ndql.onrender.com/v1/items/20
+  - name: read-21
     weight: 4
     steps:
       - method: GET
-        url: https://gomax-ndql.onrender.com/v1/items/85000
-  - name: read-90000
+        url: https://gomax-ndql.onrender.com/v1/items/21
+  - name: read-22
     weight: 4
     steps:
       - method: GET
-        url: https://gomax-ndql.onrender.com/v1/items/90000
-  - name: read-95000
+        url: https://gomax-ndql.onrender.com/v1/items/22
+  - name: read-23
     weight: 4
     steps:
       - method: GET
-        url: https://gomax-ndql.onrender.com/v1/items/95000
+        url: https://gomax-ndql.onrender.com/v1/items/23
   - name: health
     weight: 10
     steps:
@@ -119,4 +119,3 @@ scenario:
         url: https://gomax-ndql.onrender.com/v1/items
         body: '{"name":"bench","price_cents":99}'
         headers: {Content-Type: application/json}
-ramp: 30s
