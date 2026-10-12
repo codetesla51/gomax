@@ -1,0 +1,26 @@
+# Capacity sweep: VUs up until the knee, long steps for a real soak.
+# Scenario-only (no synthetic db:/redis: runners) for a clean whole-app knee.
+duration: 30s # ignored in capacity mode, kept for loader validity
+bucket_width: 1s
+concurrency: 5 # sweep start; doubles to max, then fine-fills the knee
+capacity:
+  max_concurrency: 200
+  step_duration: 20s
+scenario:
+  - name: read-item
+    weight: 80
+    steps:
+      - method: GET
+        url: http://localhost:8080/v1/items/1
+  - name: health
+    weight: 10
+    steps:
+      - method: GET
+        url: http://localhost:8080/healthz
+  - name: create-item
+    weight: 10
+    steps:
+      - method: POST
+        url: http://localhost:8080/v1/items
+        body: '{"name":"bench","price_cents":99}'
+        headers: {Content-Type: application/json}

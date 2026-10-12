@@ -1,0 +1,25 @@
+# Endurance: ~100M requests across all three endpoints.
+# Same 80/10/10 mix, 40 VUs (sustainable, under the ~80 knee).
+# At ~4.5k/s this is ~6h. Creates land in local Postgres (~10M rows).
+duration: 6h
+bucket_width: 1s
+ramp: 30s
+concurrency: 40
+scenario:
+  - name: read-item
+    weight: 80
+    steps:
+      - method: GET
+        url: http://localhost:8080/v1/items/1
+  - name: health
+    weight: 10
+    steps:
+      - method: GET
+        url: http://localhost:8080/healthz
+  - name: create-item
+    weight: 10
+    steps:
+      - method: POST
+        url: http://localhost:8080/v1/items
+        body: '{"name":"bench","price_cents":99}'
+        headers: {Content-Type: application/json}

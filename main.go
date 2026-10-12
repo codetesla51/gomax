@@ -26,6 +26,7 @@ type Config struct {
 	RedisPass   string
 	PoolMax     int32
 	CacheTTL    time.Duration
+	L1TTL       time.Duration
 }
 
 func configFromEnv() Config {
@@ -37,6 +38,7 @@ func configFromEnv() Config {
 		RedisPass:   os.Getenv("REDIS_PASSWORD"),
 		PoolMax:     int32(envIntOr("PG_POOL_MAX", 8)),
 		CacheTTL:    time.Duration(envIntOr("CACHE_TTL_SECS", 30)) * time.Second,
+		L1TTL:       time.Duration(envIntOr("L1_TTL_SECS", 5)) * time.Second,
 	}
 }
 
@@ -171,7 +173,12 @@ func newServer(ctx context.Context, cfg Config, log *slog.Logger) (*Server, erro
 	}
 
 	s := &Server{db: db, rdb: rdb, ttl: cfg.CacheTTL, log: log}
-	s.items = &itemStore{db: db, rdb: rdb, ttl: cfg.CacheTTL}
+	items, err := newItemStore(db, rdb, cfg.CacheTTL, cfg.L1TTL)
+	if err != nil {
+		s.close()
+		return nil, fmt.Errorf("l1 cache: %w", err)
+	}
+	s.items = items
 	if err := s.items.ensureSchema(ctx); err != nil {
 		s.close()
 		return nil, fmt.Errorf("schema: %w", err)

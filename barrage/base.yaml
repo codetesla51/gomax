@@ -1,0 +1,24 @@
+# Baseline: app journeys against local gomax (main.go:113-116).
+# Scenario IS the HTTP load (no http: section allowed alongside).
+duration: 30s
+bucket_width: 1s
+ramp: 5s
+concurrency: 20
+scenario:
+  - name: read-item
+    weight: 80
+    steps:
+      - method: GET
+        url: http://localhost:8080/v1/items/1
+  - name: health
+    weight: 10
+    steps:
+      - method: GET
+        url: http://localhost:8080/healthz
+  - name: create-item
+    weight: 10
+    steps:
+      - method: POST
+        url: http://localhost:8080/v1/items
+        body: '{"name":"bench","price_cents":99}'
+        headers: {Content-Type: application/json}

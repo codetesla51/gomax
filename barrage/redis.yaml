@@ -1,0 +1,12 @@
+# Isolation: raw Redis mix behind the cache-aside path (store.go:35).
+duration: 30s
+bucket_width: 1s
+ramp: 5s
+concurrency: 20
+redis:
+  rate: 300
+  target:
+    addr: localhost:6379
+    queries:
+      - {query: GET item:1, weight: 9}
+      - {query: SET item:bench {"id":0}, weight: 1}

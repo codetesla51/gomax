@@ -35,7 +35,8 @@ func writeErr(w http.ResponseWriter, code int, msg string) {
 	writeJSON(w, code, map[string]string{"error": msg})
 }
 
-// GET /v1/items/{id} — cache-aside: Redis first, Postgres PK lookup on miss.
+// GET /v1/items/{id} — L1 -> Redis -> Postgres cascade.
+// X-Cache names the serving layer so load runs prove layer behavior.
 func (s *Server) handleGetItem(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.ParseInt(r.PathValue("id"), 10, 64)
 	if err != nil || id <= 0 {
@@ -45,7 +46,7 @@ func (s *Server) handleGetItem(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)
 	defer cancel()
 
-	it, err := s.items.get(ctx, id)
+	it, src, err := s.items.get(ctx, id)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			writeErr(w, http.StatusNotFound, "not found")
@@ -55,6 +56,7 @@ func (s *Server) handleGetItem(w http.ResponseWriter, r *http.Request) {
 		writeErr(w, http.StatusInternalServerError, "internal")
 		return
 	}
+	w.Header().Set("X-Cache", string(src))
 	writeJSON(w, http.StatusOK, it)
 }
 

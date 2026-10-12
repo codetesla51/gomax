@@ -1,0 +1,19 @@
+# Isolation: raw Postgres mix behind GET/POST /v1/items (store.go:54,69).
+duration: 30s
+bucket_width: 1s
+ramp: 5s
+concurrency: 20
+db:
+  rate: 80
+  target:
+    driver: postgres
+    conn: postgres://gomax:gomax@localhost:5432/gomax?sslmode=disable
+    max_open_conns: 20
+    queries:
+      - query: SELECT id, name, price_cents FROM items WHERE id = $1
+        args: [1]
+        weight: 90
+        type: read
+      - query: INSERT INTO items (name, price_cents) VALUES ('bench', 99) RETURNING id
+        weight: 10
+        type: write
